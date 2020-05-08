@@ -66,17 +66,11 @@ X = np.linspace(0, Lx, nx, endpoint=True)
 Y = np.linspace(0, Ly, ny, endpoint=True)
 X, Y = np.meshgrid(X, Y)
 
-print(X)
-print(Y)
-
-print(len(X),len(Y),len(T))
-
+# Plot figure
 fig = plt.figure()
 ax = fig.add_subplot(111, projection = '3d')
 ax.plot_surface(X, Y, T[:,:,int(tf/dt)-1], cmap = 'gist_rainbow_r', edgecolor = 'none')
-
 ax.set_xlabel('X [m]')
 ax.set_ylabel('Y [m]')
 ax.set_zlabel('T [°]')
-
 plt.show()
