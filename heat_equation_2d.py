@@ -17,7 +17,6 @@ nx = 40 # number of points in x direction
 ny = 40 # number of points in y direction
 dt = 0.1 # time step
 tf = 10 # final time
-itmax = 100 # maximum number of iterations
 
 # Boundary conditions (Dirichlet)
 T0=1; # internal field
@@ -53,20 +52,19 @@ for j in range(1,ny-1):
 	T[1,j,1]=T3
 	T[nx-1,j,1]=T4
 
-# Main time-loop
-for t in range (1,int(tf/dt)-1):
-	for it in range(1,itmax):
-		for i in range(2,(nx-2)):
-			for j in range (2,(ny-2)):
-                		T[i,j,t+1]=k*dt*((T[i+1,j,t]-2*T[i,j,t]+T[i-1,j,t])/(dx**2)+(T[i,j+1,t]-2*T[i,j,t]+T[i,j-1,t])/(dy**2))+T[i,j,t]
-
-
 # Generate 2D mesh
 X = np.linspace(0, Lx, nx, endpoint=True)
 Y = np.linspace(0, Ly, ny, endpoint=True)
 X, Y = np.meshgrid(X, Y)
 
-# Plot figure
+# Main time-loop
+for t in range (1,int(tf/dt)-1):
+	for i in range(2,(nx-2)):
+		for j in range (2,(ny-2)):				
+			a=(T[i+1,j,t]-2*T[i,j,t]+T[i-1,j,t])/dx**2 # d2dx2
+			b=(T[i,j+1,t]-2*T[i,j,t]+T[i,j-1,t])/dy**2 # d2dy2
+			T[i,j,t+1]=k*dt*(a+b)+T[i,j,t]		
+
 fig = plt.figure()
 ax = fig.add_subplot(111, projection = '3d')
 ax.plot_surface(X, Y, T[:,:,int(tf/dt)-1], cmap = 'gist_rainbow_r', edgecolor = 'none')
