@@ -39,18 +39,18 @@ if (r1 > 0.5 or r2 > 0.5):
 T = np.zeros((nx,ny,int(tf/dt)))
 
 # Initial condition
-for i in range(1,nx-1):
+for i in range(0,nx-1):
 	for j in range(1,ny-1):
-		T[i,j,1] = T0
+		T[i,j,0] = T0
 
 # Boundary conditions set-up
-for i in range(1,nx-1):
-	T[i,1,1]=T1
-	T[i,ny-1,1]=T2
+for i in range(0,nx-1):
+	T[i,0,0]=T1
+	T[i,ny-1,0]=T2
 
-for j in range(1,ny-1):
-	T[1,j,1]=T3
-	T[nx-1,j,1]=T4
+for j in range(0,ny-1):
+	T[0,j,0]=T3
+	T[nx-1,j,0]=T4
 
 # Generate 2D mesh
 X = np.linspace(0, Lx, nx, endpoint=True)
@@ -58,9 +58,9 @@ Y = np.linspace(0, Ly, ny, endpoint=True)
 X, Y = np.meshgrid(X, Y)
 
 # Main time-loop
-for t in range (1,int(tf/dt)-1):
-	for i in range(2,(nx-2)):
-		for j in range (2,(ny-2)):				
+for t in range (0,int(tf/dt)-1):
+	for i in range(1,(nx-2)):
+		for j in range (1,(ny-2)):				
 			a=(T[i+1,j,t]-2*T[i,j,t]+T[i-1,j,t])/dx**2 # d2dx2
 			b=(T[i,j+1,t]-2*T[i,j,t]+T[i,j-1,t])/dy**2 # d2dy2
 			T[i,j,t+1]=k*dt*(a+b)+T[i,j,t]		
