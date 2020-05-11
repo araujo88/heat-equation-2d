@@ -44,11 +44,11 @@ for i in range(0,nx-1):
 		T[i,j,0] = T0
 
 # Boundary conditions set-up
-for i in range(0,nx-1):
+for i in range(0,nx):
 	T[i,0,0]=T1
 	T[i,ny-1,0]=T2
 
-for j in range(0,ny-1):
+for j in range(0,ny):
 	T[0,j,0]=T3
 	T[nx-1,j,0]=T4
 
@@ -59,8 +59,8 @@ X, Y = np.meshgrid(X, Y)
 
 # Main time-loop
 for t in range (0,int(tf/dt)-1):
-	for i in range(1,(nx-2)):
-		for j in range (1,(ny-2)):				
+	for i in range(1,(nx-1)):
+		for j in range (1,(ny-1)):				
 			a=(T[i+1,j,t]-2*T[i,j,t]+T[i-1,j,t])/dx**2 # d2dx2
 			b=(T[i,j+1,t]-2*T[i,j,t]+T[i,j-1,t])/dy**2 # d2dy2
 			T[i,j,t+1]=k*dt*(a+b)+T[i,j,t]		
