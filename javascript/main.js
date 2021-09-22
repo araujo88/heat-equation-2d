@@ -53,12 +53,15 @@ function checkConvergence(z, z0, nx, ny, eps) {
 }
 
 // Solve differential equation
-function solve(z, z0, nx, ny, eps, maxIt) {
+function solve(z, z0, Lx, Ly, nx, ny, eps, maxIt) {
+   let dx = Lx/nx;
+   let dy = Ly/ny;
+
    for (let it = 0; it < maxIt; it++) {
       z0 = JSON.parse(JSON.stringify(z)); // deep copy
       for (let i = 1; i < nx-1; i++) {
          for (let j = 1; j < ny-1; j++) {
-            z[i][j] = (z[i+1][j]+z[i-1][j]+z[i][j+1]+z[i][j-1])/4;
+            z[i][j] = (dy*dy*(z[i+1][j]+z[i-1][j])+dx*dx*(z[i][j+1]+z[i][j-1]))/(2*(dx*dx+dy*dy));
          }
       }
       if (checkConvergence(z, z0, nx, ny, eps) == true) {
@@ -100,13 +103,14 @@ function compute() {
    T2 = +document.getElementById("T2").value;
    T3 = +document.getElementById("T3").value;
    T4 = +document.getElementById("T4").value;
+
    let T = new Array(nx).fill(0).map(()=>Array(ny).fill(0));
    let T0 = new Array(nx).fill(0).map(()=>Array(ny).fill(0));
+
    T = dirichletBC(T, nx, ny, T1, T2, T3, T4);
    T0 = dirichletBC(T0, nx, ny, T1, T2, T3, T4);
-   T = solve(T, T0, nx, ny, eps, maxIt);
+   T = solve(T, T0, Lx, Ly, nx, ny, eps, maxIt);
    plot(T);
 }
 
 document.getElementById("solve").addEventListener("click", compute);
-  
